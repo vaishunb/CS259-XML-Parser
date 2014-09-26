@@ -16,7 +16,7 @@ import java.io.IOException;
  * @author  Computer Science E-259
  * @version 8.0
  *
- * @author  YOUR NAME GOES HERE
+ * @author  Aliaksei Yeusiukou
  **/
 public class XMLParser
 {
@@ -62,6 +62,13 @@ public class XMLParser
     protected boolean isStartTag()
     {
         return data_.charAt(index_) == '<';
+    }
+    
+    //Returns true if the next character in the stream is a whitespace.
+    protected boolean isWhitespace(){
+    	if (data_.charAt(index_) == ' ' || data_.charAt(index_) == '\n' || data_.charAt(index_) == '\t')
+    		return true;
+    	else return false;
     }
 
 
@@ -109,14 +116,14 @@ public class XMLParser
      */
     protected void readElement()
     {
-        if (!isStartTag())
-        {
-            handler_.fatalError(new RuntimeException("Error: expecting " +
-                                                     "start of element"));
-            return;
-        }
+    	//Ignoring whitespaces before start tags.
+    	while(!isStartTag()){
+    		if(isWhitespace())
+        		index_++;
+    		else handler_.fatalError(new RuntimeException("Error: expecting " + "start of element"));
+    	}
 
-        // parse end tag
+        // parse start tag
         String name = readStartTag();
 
         // keep reading in more elements and text until an end tag
