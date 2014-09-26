@@ -1,0 +1,12 @@
+*.class
+
+# Exclude build folders
+/bin
+/build
+/xalan-j_2_7_0 2
+
+# Exclude system files
+.DS_Store
+.classpath
+.project
+
