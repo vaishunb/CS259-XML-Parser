@@ -12,7 +12,7 @@ import org.apache.xml.serialize.XMLSerializer;
  * @author  Computer Science E-259
  * @version 8.0
  *
- * @author  Aliaksei Yeusiukou
+ * @author  YOUR NAME GOES HERE
  **/
 public class AttributeConverter
 {

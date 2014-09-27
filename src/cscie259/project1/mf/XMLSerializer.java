@@ -15,7 +15,7 @@ import java.io.IOException;
  * @author  Computer Science E-259
  * @version 8.0
  *
- * @author  Aliaksei Yeusiukou
+ * @author  YOUR NAME GOES HERE
  **/
 public class XMLSerializer extends DefaultHandler
 {

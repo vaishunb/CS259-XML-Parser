@@ -12,7 +12,7 @@ import java.io.OutputStreamWriter;
  * @author  Computer Science E-259
  * @version 8.0
  *
- * @author  Aliaksei Yeusiukou
+ * @author  YOUR NAME GOES HERE
  **/
 public class Tester
 {
