@@ -1,5 +1,7 @@
 package cscie259.project1.mf;
 
+import java.util.HashMap;
+
 
 /**
  * A simplified version of org.xml.sax.helpers.AttributesImpl.
@@ -17,6 +19,10 @@ package cscie259.project1.mf;
  **/
 public class Attributes
 {
+	private HashMap<Integer, String> nameMap = new HashMap<Integer, String>();
+	private HashMap<Integer, String> valueMap = new HashMap<Integer, String>();
+	private int index = 0;
+	
     /**
      * Adds a new attribute (i.e., name/value pair) to the collection.
      *
@@ -25,8 +31,9 @@ public class Attributes
      */
     public void addAttribute(String name, String value)
     {
-        // TODO
-        return;
+        nameMap.put(index, name);
+        valueMap.put(index, value);
+        index++;
     }
 
 
@@ -37,8 +44,7 @@ public class Attributes
      */
     public int getLength()
     {
-        // TODO
-        return 0;
+        return index;
     }
 
 
@@ -52,8 +58,7 @@ public class Attributes
      */
     public String getName(int index)
     {
-        // TODO
-        return null;
+        return nameMap.get(index);
     }
 
 
@@ -66,7 +71,6 @@ public class Attributes
      */
     public String getValue(int index)
     {
-        // TODO
-        return null;
+        return valueMap.get(index);
     }
 }

@@ -134,7 +134,7 @@ public class XMLSerializer extends DefaultHandler
     }
 
 
-    /**
+	/**
      * Prints the number of indents currently appropriate.
      *
      * @throws IOException run-time failure of writing operation
@@ -170,10 +170,14 @@ public class XMLSerializer extends DefaultHandler
             out_.write(name, 0, name.length());
 
             // write element's attributes, if any
-            // TODO
+            if(atts != null)
+                for(int i=0; i<atts.getLength(); i++){
+                	out_.write(" "+atts.getName(i)+"=\""+atts.getValue(i)+"\"");
+                }
 
             // write >
-            out_.write('>');
+            //out_.write('>');
+            //TODO find another >
 
             // pretty-print if applicable
             if (prettyPrint_)
@@ -187,4 +191,11 @@ public class XMLSerializer extends DefaultHandler
             throw new RuntimeException("Error: I/O error " + E.getMessage());
         }
     }
+    
+
+    @Override
+	public void fatalError(Exception exception) {
+		System.out.println(exception.toString());
+		super.fatalError(exception);
+	}
 }
