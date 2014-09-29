@@ -176,8 +176,7 @@ public class XMLSerializer extends DefaultHandler
                 }
 
             // write >
-            //out_.write('>');
-            //TODO find another >
+            out_.write('>');
 
             // pretty-print if applicable
             if (prettyPrint_)

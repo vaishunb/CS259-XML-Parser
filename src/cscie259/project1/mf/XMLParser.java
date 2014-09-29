@@ -120,6 +120,16 @@ public class XMLParser
         
         // pass element
         handler_.startElement(name, readAttributes());
+        
+        // check for <... /> construction
+        if(data_.charAt(index_) == '/'){
+			// skip possible whitespaces
+			while (java.lang.Character.isWhitespace(data_.charAt(++index_))) {}
+			if(data_.charAt(index_) == '>'){
+				handler_.endElement(name);
+				return;
+			}
+        }
 
         // keep reading in more elements and text until an end tag
         // is encountered
@@ -192,7 +202,7 @@ public class XMLParser
         index_++;
 
         // Read name
-        while (data_.charAt(index_) != '>' && data_.charAt(index_) != ' ')
+        while (data_.charAt(index_) != '>' && data_.charAt(index_) != ' ' && data_.charAt(index_) != '/')
         {
             name += data_.charAt(index_);
             index_++;
@@ -208,7 +218,7 @@ public class XMLParser
         String attributeValue;
         Attributes attributes = null;
         
-        while (data_.charAt(index_) != '>'){
+        while (data_.charAt(index_) != '/' && data_.charAt(index_) != '>'){
         	
         	attributeName = "";
             attributeValue = "";
@@ -218,34 +228,69 @@ public class XMLParser
         	}
         	
         	// Read attribute name
-        	while (data_.charAt(index_)!= '='){
+        	while (data_.charAt(index_)!= '=' && !java.lang.Character.isWhitespace(data_.charAt(index_))){
 
             	if( data_.charAt(index_) >= 'A' && data_.charAt(index_) <= 'Z'
             			|| data_.charAt(index_) >= 'a' && data_.charAt(index_) <= 'z'
             			|| data_.charAt(index_) >= 0 && data_.charAt(index_) <= 9
             			|| data_.charAt(index_) == '-'
             			|| data_.charAt(index_) == '.'
-            			|| data_.charAt(index_) == '_' )
+            			|| data_.charAt(index_) == '_' ){
             		attributeName+=data_.charAt(index_);
+            	}
             	else handler_.fatalError(new Exception("Inappropriate symbol \""+data_.charAt(index_)+"\" in the attribute name"));
+            	
             	index_++;
         	}
         	
-        	if( data_.charAt(++index_) != '"' )
+			if (data_.charAt(index_) != '=')
+				// skip possible whitespaces
+				while (java.lang.Character.isWhitespace(data_.charAt(index_))) {
+					index_++;
+				}
+			
+			//Check for "="
+			if (data_.charAt(index_++) != '=')
+				handler_.fatalError(new Exception("Inappropriate symbol \""+data_.charAt(index_)+"\". \"=\" expected."));
+			
+			// skip possible whitespaces
+			while (java.lang.Character.isWhitespace(data_.charAt(index_))) {
+				index_++;
+			}
+        	
+			//Check for "
+        	if( data_.charAt(index_++) != '"' )
         		handler_.fatalError(new Exception("Error in the \""+attributeName+"\" attribute."));
         	
+			// skip possible whitespaces
+			while (java.lang.Character.isWhitespace(data_.charAt(index_))) {
+				index_++;
+			}
+        	
         	// Read attribute value
-        	while (data_.charAt(++index_)!='"'){
+        	while (data_.charAt(index_)!='"' && !java.lang.Character.isWhitespace(data_.charAt(index_)) ){
         		if(data_.charAt(index_) == '<' || data_.charAt(index_) == '>'){
         			handler_.fatalError(new Exception("Inappropriate symbol \""+data_.charAt(index_)+"\""));
-        			continue;
+        			//continue;
         		}
         		attributeValue+=data_.charAt(index_);
+        		index_++;
+        	}
+
+        	// check for "
+        	if(data_.charAt(index_)!='"'){
+    			// skip possible whitespaces
+    			while (java.lang.Character.isWhitespace(data_.charAt(index_))) {
+    				index_++;
+    			}
+    			if(data_.charAt(index_)!='"')
+    				handler_.fatalError(new Exception("Inappropriate symbol \""+data_.charAt(index_)+
+            				"\" \" expected."));
         	}
         	
-        	if(data_.charAt(++index_)!=' ' && data_.charAt(index_)!='>')
-        		handler_.fatalError(new Exception("Inappropriate symbol \""+data_.charAt(index_)+"\" after the attribute "+attributeName));
-
+        	index_++;
+        	
+ 
         	// Add the attribute
         	if(attributes == null)
         		attributes = new Attributes();
@@ -267,7 +312,8 @@ public class XMLParser
         // accumulate characters until next tag
         while (data_.charAt(index_) != '<')
         {
-            content += data_.charAt(index_);
+        	if(data_.charAt(index_) != '>')
+        		content += data_.charAt(index_);
             index_++;
         }
 
