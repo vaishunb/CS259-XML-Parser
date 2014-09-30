@@ -48,13 +48,8 @@ public abstract class DOMWalker
                 break;
 
             case Node.ELEMENT_NODE:
-
-                // PROVIDE SUPPORT FOR YOUR IMPLEMENTATION OF
-                // ATTRIBUTES BELOW; IN OTHER WORDS, REPLACE
-                // null BELOW WITH A REFERENCE TO AN Attributes OBJECT
-                // STORING THE CURRENT ELEMENT'S COLLECTION
-                // OF ATTRIBUTES
-                handler.startElement(cur.getNodeName(), null);
+            	
+                handler.startElement(cur.getNodeName(), ((Element)cur).getAttributes());
 
                 Iterator iter = cur.getChildNodes().iterator();
 

@@ -27,6 +27,8 @@ public class DOMBuilder extends DefaultHandler
      * The DOM's topmost node.
      */
     private Document doc_;
+    
+    private Node currentNode;
 
 
     /**
@@ -39,6 +41,38 @@ public class DOMBuilder extends DefaultHandler
         return doc_;
     }
 
+    
 
-    // TODO
+    @Override
+	public void characters(String content) {
+		currentNode.appendChild(new Text(content));
+	}
+
+
+	@Override
+	public void startDocument() {
+		doc_ = new Document();
+		currentNode = doc_;
+	}
+
+
+	@Override
+	public void startElement(String name, Attributes atts) {
+		Element element = new Element(name);
+		
+		if(atts!=null){
+			for(int i=0; i<atts.getLength(); i++){
+				element.addAtribute(new Attr(atts.getName(i), atts.getValue(i)));
+			}
+		}
+
+		currentNode.appendChild(element);
+		currentNode = element;
+	}
+
+
+	@Override
+	public void endElement(String name) {
+		currentNode = currentNode.getParentNode();
+	}
 }

@@ -1,5 +1,8 @@
 package cscie259.project1.mf;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 
 /**
  * A simplified, non-interface version of org.w3c.dom.Element.
@@ -14,6 +17,8 @@ package cscie259.project1.mf;
  **/
 public class Element extends Node
 {
+	private ArrayList<Attr> attributesList = new ArrayList<Attr>();
+	
     /**
      * Sets node's name.
      *
@@ -33,5 +38,30 @@ public class Element extends Node
     public int getNodeType()
     {
         return Node.ELEMENT_NODE;
+    }
+    
+    /**
+     *  Adds an attribute to the list.
+     */
+    public void addAtribute(Attr attribute){
+    	attributesList.add(attribute);
+    }
+    
+    /**
+     * @return Iterator of all the attributes.
+     */
+    public Iterator<Attr> getAttrIterator(){
+    	return attributesList.iterator();
+    }
+    
+    /**
+     * Returns all attributes of the element.
+     * @return all attributes of the element
+     */
+    public Attributes getAttributes(){
+    	Attributes attributes = new Attributes();
+    	for(Attr attr:attributesList)
+    		attributes.addAttribute(attr.getNodeName(), attr.getNodeValue());
+    	return attributes;
     }
 }
